@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +34,7 @@ import com.example.layering.model.impl.client.ClientImpl;
 import com.example.layering.model.impl.client.ProductImpl;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClientBOMockitoTest {
@@ -43,7 +42,7 @@ public class ClientBOMockitoTest {
     ArgumentCaptor<Client> clientArgumentCaptured = ArgumentCaptor
             .forClass(Client.class);
 
-    private static final int DUMMY_CLIENT_ID = 1;
+    private static long id= 1;
 
     @Mock
     private ProductDO productDO;
@@ -60,11 +59,15 @@ public class ClientBOMockitoTest {
 
         List<Product> products = Arrays.asList(
                 createProductWithAmount("5.0"), createProductWithAmount("6.0"));
-        Mockito.when(productDO.getAllProducts(eq(1L))).thenReturn(products);
 
+       Mockito.when(productDO.getAllProducts(eq(1L))).thenReturn(products);
+
+        clientBO.getClientProductsSum(1L);
+
+        clientBO.getClientProductsSum(2L);
         assertAmountEquals(
                 new AmountImpl(new BigDecimal("11.0"), Currency.EURO),
-                clientBO.getClientProductsSum(DUMMY_CLIENT_ID));
+                clientBO.getClientProductsSum(id));
     }
 
 
@@ -72,11 +75,10 @@ public class ClientBOMockitoTest {
     @Test
     public void saveChangedProducts_ProductInDatabaseButNotInScreen_Deleted() {
 
-        Product productFromDatabase = createProduct();
+        Product productFromDatabase = createProduct(id);
 
         List<Product> databaseProducts = Arrays.asList(productFromDatabase);
         List<Product> emptyScreenProducts = new ArrayList<Product>();
-
         when(productDO.getAllProducts(anyLong())).thenReturn(databaseProducts);
 
         clientBO.saveChangedProducts(1, emptyScreenProducts);
@@ -121,9 +123,14 @@ public class ClientBOMockitoTest {
     }
 
 
-    private Product createProduct() {
-        return new ProductImpl(100, "Product 15",
+    private Product createProduct(long id) {
+        return new ProductImpl(id, "Product 15",
                 ProductType.BANK_GUARANTEE, new AmountImpl(
                 new BigDecimal("5.0"), Currency.EURO));
+    }
+
+    private void createDynamicResponse() {
+        when(productDO.getAllProducts(anyLong()))
+                .thenAnswer((Answer<List<Product>>) invocation -> Arrays.asList(createProduct(id++)));
     }
 }
