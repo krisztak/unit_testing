@@ -10,8 +10,8 @@
 	<description>This pom acts as the parent pom for the entire project.</description>
 
 	<properties>
-		<spring-core-version>4.1.6.RELEASE</spring-core-version>
-		<spring-aop-version>4.1.6.RELEASE</spring-aop-version>
+		<spring-core-version>5.0.0.RELEASE</spring-core-version>
+		<spring-aop-version>5.0.0.RELEASE</spring-aop-version>
 	</properties>
 
 	<modules>
@@ -146,16 +146,8 @@
 				<version>1.6.4</version>
 				<scope>test</scope>
 			</dependency>
-			<dependency>
-				<groupId>javax.validation</groupId>
-				<artifactId>validation-api</artifactId>
-				<version>2.0.1.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>3.0</version>
-			</dependency>
+
+
 			<dependency>
 				<groupId>org.passay</groupId>
 				<artifactId>passay</artifactId>
