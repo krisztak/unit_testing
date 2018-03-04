@@ -38,7 +38,6 @@ public class ClientBOImpl implements ClientBO {
 				Currency.EURO);
 	}
 
-
 	@Override
 	public void saveChangedProducts(long clientId,
 			List<Product> userEnteredProducts) {
