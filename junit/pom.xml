@@ -7,12 +7,18 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	<artifactId>mockito-example-junit</artifactId>
 	<name>${project.artifactId}</name>
 	<description>Sample Implementation to exercise junit.</description>
 
 	<dependencies>
+
+		<!-- Test Specific Dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
