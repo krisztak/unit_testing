@@ -32,4 +32,5 @@ public interface ClientBO {
      */
     void calculateAndSaveClientProductSum(Client client);
 
+    void saveClientWithRetry(Client client);
 }

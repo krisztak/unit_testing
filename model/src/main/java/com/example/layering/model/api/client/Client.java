@@ -21,5 +21,7 @@ public interface Client {
 	void setProductAmount(BigDecimal productAmount);
 
 	BigDecimal getProductAmount();
+
+	void setName(String name);
 	
 }

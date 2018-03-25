@@ -1,13 +1,5 @@
 package com.example.layering.business.impl.client;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.layering.business.api.client.ClientBO;
 import com.example.layering.data.api.client.ClientDO;
 import com.example.layering.data.api.client.ProductDO;
@@ -16,6 +8,13 @@ import com.example.layering.model.api.client.Client;
 import com.example.layering.model.api.client.Currency;
 import com.example.layering.model.api.client.Product;
 import com.example.layering.model.impl.client.AmountImpl;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 
 /**
  * Data Object for the Client entity.
@@ -59,6 +58,17 @@ public class ClientBOImpl implements ClientBO {
 				.getProducts());
 		client.setProductAmount(clientProductSum);
 		clientDO.saveClient(client);
+	}
+
+	@Override
+	public void saveClientWithRetry(Client client){
+
+		try {
+			clientDO.saveClient(client);
+		}catch(RuntimeException e){
+
+		client.setName("DefaultName");
+		clientDO.saveClient(client);}
 	}
 
 	private void deleteStaleProducts(long clientId,

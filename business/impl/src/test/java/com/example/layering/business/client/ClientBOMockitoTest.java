@@ -1,25 +1,5 @@
 package com.example.layering.business.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
 import com.example.layering.business.api.client.ClientBO;
 import com.example.layering.business.impl.client.ClientBOImpl;
 import com.example.layering.data.api.client.ClientDO;
@@ -32,9 +12,25 @@ import com.example.layering.model.api.client.ProductType;
 import com.example.layering.model.impl.client.AmountImpl;
 import com.example.layering.model.impl.client.ClientImpl;
 import com.example.layering.model.impl.client.ProductImpl;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClientBOMockitoTest {
@@ -55,23 +51,24 @@ public class ClientBOMockitoTest {
 
 
     @Test
-    public void testClientProductSum() {
+    public void exampleTestClientProductSum() {
 
         List<Product> products = Arrays.asList(
                 createProductWithAmount("5.0"), createProductWithAmount("6.0"));
 
+        //This will only work for clientID=1
        Mockito.when(productDO.getAllProducts(eq(1L))).thenReturn(products);
 
-        clientBO.getClientProductsSum(1L);
-
-        clientBO.getClientProductsSum(2L);
         assertAmountEquals(
                 new AmountImpl(new BigDecimal("11.0"), Currency.EURO),
-                clientBO.getClientProductsSum(id));
+                clientBO.getClientProductsSum(1L));
     }
 
+    //write a test for getClientProduct sum to return the same response for any clientId
+    //write a test for getClientProduct sum to create a dynamic response
 
-    @Ignore
+
+    //write a test to update product, insert product and delete product, see the example below
     @Test
     public void saveChangedProducts_ProductInDatabaseButNotInScreen_Deleted() {
 
@@ -83,9 +80,9 @@ public class ClientBOMockitoTest {
 
         clientBO.saveChangedProducts(1, emptyScreenProducts);
         verify(productDO, atLeastOnce()).deleteProduct(anyLong(), any(Product.class));
-
     }
 
+    //verify argument passed to a specific method with argumentCaptor
     @Test
     public void calculateAndSaveClientProductSum1() {
 
@@ -97,11 +94,14 @@ public class ClientBOMockitoTest {
 
         verify(clientDO).saveClient(clientArgumentCaptured.capture());
 
-
         assertEquals(new BigDecimal("12.0"), clientArgumentCaptured.getValue()
                 .getProductAmount());
-
     }
+
+    //write test where the an exception is thrown during mocking
+    //write test where a void method is mocked
+
+
 
     private ClientImpl createClientWithProducts(Product... products) {
         ClientImpl client = new ClientImpl(0, null, null,
