@@ -68,16 +68,13 @@ public class DummyMethodsImpl {
         return user;
     }
 
-
     public BasketBallPlayer rookieJoinsTeam(BasketBallPlayer rookie) {
         if ("Tigers".equals(rookie.getTeam())) {
             rookie.setRookie(true);
             rookie.setTeamMates(createTigerTeam());
         } else throw new WrongTeamException();
-
         return rookie;
     }
-
 
     //dummy method to avoid mocking
     private User findApplicationUser(Long userId) {

@@ -9,6 +9,7 @@ import com.example.layering.model.api.client.Currency;
 import com.example.layering.model.api.client.Product;
 import com.example.layering.model.impl.client.AmountImpl;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,32 @@ public class ClientBOImpl implements ClientBO {
 
 		return new AmountImpl(calculateClientProductSum(existingProducts),
 				Currency.EURO);
+	}
+
+	@Override
+	public Client getClientDetailsWithTotalAmount(long clientId) {
+		List<Product> existingProducts = productDO.getAllProducts(clientId);
+
+		Client clientWithDetails = clientDO.getClientDetails(clientId);
+
+		clientWithDetails.setProductAmount(calculateClientProductSum(existingProducts));
+		return clientWithDetails;
+	}
+
+	@Override
+	public Client simulateClientReset(Client client) {
+		client.setName("");
+		client.setProductAmount(BigDecimal.ZERO);
+		client.setProducts(Collections.emptyList());
+		return client;
+	}
+
+	@Override
+	public void changeClient(Client client, long clientId) {
+		Client clientToUpdate = clientDO.getClientDetails(clientId);
+		clientToUpdate.setName(client.getName());
+		clientToUpdate.setProductAmount(client.getProductAmount());
+		clientDO.saveClient(clientToUpdate);
 	}
 
 	@Override
@@ -70,6 +97,17 @@ public class ClientBOImpl implements ClientBO {
 		client.setName("DefaultName");
 		clientDO.saveClient(client);}
 	}
+
+	@Override
+	public void increaseProductPriceForClient(long clientId){
+		List<Product> existingProducts = productDO.getAllProducts(clientId);
+		for (Product newProduct : existingProducts) {
+				Amount increasedAmount = newProduct.getAmount();
+				increasedAmount.setValue(increasedAmount.getValue().add(BigDecimal.valueOf(100)));
+				newProduct.setAmount(increasedAmount);
+				productDO.updateProduct(clientId, newProduct);
+			}
+		}
 
 	private void deleteStaleProducts(long clientId,
 			List<Product> existingProducts, List<Product> newProducts) {

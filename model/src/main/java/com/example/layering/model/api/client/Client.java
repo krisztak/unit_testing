@@ -18,6 +18,8 @@ public interface Client {
 
 	List<Product> getProducts();
 
+	void setProducts(List<Product> products);
+
 	void setProductAmount(BigDecimal productAmount);
 
 	BigDecimal getProductAmount();

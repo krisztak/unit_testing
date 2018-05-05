@@ -33,4 +33,30 @@ public interface ClientBO {
     void calculateAndSaveClientProductSum(Client client);
 
     void saveClientWithRetry(Client client);
+
+    /**
+     * Returns saved details for a client
+     * @param clientId
+     */
+    Client getClientDetailsWithTotalAmount(long clientId);
+
+    /**
+     * Dummy method to simulatre rename client
+     * @param client, name
+     */
+    Client simulateClientReset(Client client);
+
+    /**
+     * Change client details
+     * @param client, clientId
+     */
+    void changeClient(Client client, long clientId);
+
+
+    /**
+     * Change client details
+     * @param clientId
+     */
+    void increaseProductPriceForClient(long clientId);
+
 }
