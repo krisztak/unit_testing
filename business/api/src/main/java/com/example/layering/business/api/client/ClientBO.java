@@ -13,6 +13,7 @@ public interface ClientBO {
 
     /**
      * Sum of product amounts. Assumes Currency as EURO.
+     *
      * @param clientId clientId
      * @return the sum amount
      */
@@ -21,13 +22,15 @@ public interface ClientBO {
     /**
      * Compares the new products with existing products and saves changed
      * products.
-     * @param clientId clientId
+     *
+     * @param clientId    clientId
      * @param newProducts
      */
     void saveChangedProducts(long clientId, List<Product> newProducts);
 
     /**
      * Calculates client product sum and saves it to database.
+     *
      * @param client
      */
     void calculateAndSaveClientProductSum(Client client);
@@ -36,27 +39,32 @@ public interface ClientBO {
 
     /**
      * Returns saved details for a client
+     *
      * @param clientId
      */
     Client getClientDetailsWithTotalAmount(long clientId);
 
     /**
      * Dummy method to simulatre rename client
+     *
      * @param client, name
      */
     Client simulateClientReset(Client client);
 
     /**
      * Change client details
+     *
      * @param client, clientId
      */
     void changeClient(Client client, long clientId);
 
+    /**
+     * Inserts a new client and calculates total product sum
+     */
+    Client addNewClientSetProductSum(Client client);
 
     /**
-     * Change client details
-     * @param clientId
+     *Increases all product price
      */
     void increaseProductPriceForClient(long clientId);
-
 }

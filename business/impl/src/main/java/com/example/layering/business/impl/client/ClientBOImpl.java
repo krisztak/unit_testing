@@ -30,15 +30,6 @@ public class ClientBOImpl implements ClientBO {
 	ClientDO clientDO;
 
 	@Override
-	public Amount getClientProductsSum(long clientId) {
-
-		List<Product> existingProducts = productDO.getAllProducts(clientId);
-
-		return new AmountImpl(calculateClientProductSum(existingProducts),
-				Currency.EURO);
-	}
-
-	@Override
 	public Client getClientDetailsWithTotalAmount(long clientId) {
 		List<Product> existingProducts = productDO.getAllProducts(clientId);
 
@@ -49,8 +40,30 @@ public class ClientBOImpl implements ClientBO {
 	}
 
 	@Override
+	public Client addNewClientSetProductSum(Client client) {
+
+		for (Product newProduct : client.getProducts()) {
+			productDO.insertProduct(client.getId(), newProduct);
+		}
+
+		client.setProductAmount(calculateClientProductSum(client.getProducts()));
+		clientDO.saveClient(client);
+
+		return client;
+	}
+
+	@Override
+	public Amount getClientProductsSum(long clientId) {
+
+		List<Product> existingProducts = productDO.getAllProducts(clientId);
+
+		return new AmountImpl(calculateClientProductSum(existingProducts),
+				Currency.EURO);
+	}
+
+	@Override
 	public Client simulateClientReset(Client client) {
-		client.setName("");
+		client.setName(null);
 		client.setProductAmount(BigDecimal.ZERO);
 		client.setProducts(Collections.emptyList());
 		return client;
@@ -103,7 +116,7 @@ public class ClientBOImpl implements ClientBO {
 		List<Product> existingProducts = productDO.getAllProducts(clientId);
 		for (Product newProduct : existingProducts) {
 				Amount increasedAmount = newProduct.getAmount();
-				increasedAmount.setValue(increasedAmount.getValue().add(BigDecimal.valueOf(100)));
+				increasedAmount.setValue(increasedAmount.getValue().multiply(BigDecimal.valueOf(1.2)));
 				newProduct.setAmount(increasedAmount);
 				productDO.updateProduct(clientId, newProduct);
 			}
